@@ -9,15 +9,16 @@ import {
 interface HelloArgs {
   slug: string;
   number: number;
+  remainder: string;
 }
 
 @Discord("!")
 @Description("My super app")
 @Infos({ hello: "world" })
 export abstract class AppDiscord {
-  @Command("hello :slug :number")
+  @Command("hello :slug :number :remainder...")
   hello(command: CommandMessage<HelloArgs>) {
-    const { slug, number } = command.args;
-    console.log(slug, number);
+    const { slug, number, remainder } = command.args;
+    console.log(slug, number, remainder);
   }
 }
