@@ -45,7 +45,7 @@ export class Client extends ClientJS {
     this._loadClasses = options?.classes || [];
 
     Client._variablesChar = options?.variablesChar || ":";
-    Client._variablesExpression = new RegExp(`\\s{1,}${Client._variablesChar}\\w*`, "g");
+    Client._variablesExpression = new RegExp(`\\s{1,}${Client._variablesChar}[\\w.]*`, "g");
   }
 
   /**
@@ -109,14 +109,14 @@ export class Client extends ClientJS {
 
     const usedEvents = (
       MetadataStorage.instance.events
-      .reduce<DOn[]>((prev, event, index) => {
-        const found = MetadataStorage.instance.events.find((event2) => event.event === event2.event);
-        const foundIndex = MetadataStorage.instance.events.indexOf(found);
-        if (foundIndex === index || found.once !== event.once) {
-          prev.push(event);
-        }
-        return prev;
-      }, [])
+        .reduce<DOn[]>((prev, event, index) => {
+          const found = MetadataStorage.instance.events.find((event2) => event.event === event2.event);
+          const foundIndex = MetadataStorage.instance.events.indexOf(found);
+          if (foundIndex === index || found.once !== event.once) {
+            prev.push(event);
+          }
+          return prev;
+        }, [])
     );
 
     usedEvents.map(async (on) => {
@@ -157,7 +157,7 @@ export class Client extends ClientJS {
    * @param params Params to inject
    * @param once Trigger an once event
    */
-  trigger (event: DiscordEvents, params?: any, once: boolean = false): Promise<any[]> {
+  trigger(event: DiscordEvents, params?: any, once: boolean = false): Promise<any[]> {
     return MetadataStorage.instance.trigger(
       event,
       this,

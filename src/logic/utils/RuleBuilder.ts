@@ -87,7 +87,7 @@ export class RuleBuilder {
 
   static escape(text: Expression) {
     if (typeof text === "string") {
-      return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+      return text.replace(/[-\/\\^$*+?()|[\]{}]/g, "\\$&");
     }
     return text;
   }

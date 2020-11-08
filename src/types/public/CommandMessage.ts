@@ -16,7 +16,7 @@ export class CommandMessage<
   ArgsType = any,
   InfoType extends InfosType = any>
   extends Message implements CommandInfos<InfoType, Expression
->{
+  >{
   prefix: Expression | ExpressionFunction;
   commandName: Expression | ExpressionFunction;
   description: string;
@@ -44,7 +44,7 @@ export class CommandMessage<
   }
 
   static parseArgs(expression: RuleBuilder[], message: CommandMessage) {
-    const excludeSpecialChar = /[^\w]/gi;
+    const excludeSpecialChar = /[^\w.]/gi;
     const splitSpaces = /\s{1,}/g;
 
     const originalArgsNames = expression[1].source.match(Client.variablesExpression) || [];
@@ -52,10 +52,19 @@ export class CommandMessage<
 
     originalArgsNames.map((argName, index) => {
       const normalized = argName.replace(excludeSpecialChar, "").trim();
-      const value = argsValues[index];
-      const numberValue = Number(value);
 
-      message.args[normalized] = Number.isNaN(numberValue) ? value : numberValue;
+      if (normalized.endsWith("...")) { // Get remainder if argument name ends with ...
+        const value = argsValues.slice(index).join(" ");
+        const numberValue = Number(value);
+
+        message.args[normalized.replace("...", "")] = Number.isNaN(numberValue) ? value : numberValue;
+        return; // Return early
+      } else {
+        const value = argsValues[index];
+        const numberValue = Number(value);
+
+        message.args[normalized] = Number.isNaN(numberValue) ? value : numberValue;
+      }
     });
   }
 }
