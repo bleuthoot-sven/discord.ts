@@ -45,7 +45,7 @@ export class Client extends ClientJS {
     this._loadClasses = options?.classes || [];
 
     Client._variablesChar = options?.variablesChar || ":";
-    Client._variablesExpression = new RegExp(`\\s{1,}${Client._variablesChar}[\\w.]*`, "g");
+    Client._variablesExpression = new RegExp(`\\s{1,}${Client._variablesChar}(\\w|\\.{3})*`, "g");
   }
 
   /**

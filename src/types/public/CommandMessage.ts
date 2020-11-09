@@ -57,7 +57,7 @@ export class CommandMessage<
         const value = argsValues.slice(index).join(" ");
         const numberValue = Number(value);
 
-        message.args[normalized.replace(".", "")] = Number.isNaN(numberValue) ? value : numberValue;
+        message.args[normalized.replace("...", "")] = Number.isNaN(numberValue) ? value : numberValue;
         return; // Return early
       } else {
         const value = argsValues[index];
