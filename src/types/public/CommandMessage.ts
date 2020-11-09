@@ -50,21 +50,21 @@ export class CommandMessage<
     const originalArgsNames = expression[1].source.match(Client.variablesExpression) || [];
     const argsValues = message.content.replace(expression[0].regex, "").split(splitSpaces).filter(i => i);
 
-    originalArgsNames.map((argName, index) => {
-      const normalized = argName.replace(excludeSpecialChar, "").trim();
+    for (let i = 0; i < originalArgsNames.length; i++) {
+      const normalized = originalArgsNames[i].replace(excludeSpecialChar, "").trim();
 
       if (normalized.endsWith("...")) { // Get remainder if argument name ends with ...
-        const value = argsValues.slice(index).join(" ");
+        const value = argsValues.slice(i).join(" ");
         const numberValue = Number(value);
 
         message.args[normalized.replace("...", "")] = Number.isNaN(numberValue) ? value : numberValue;
-        return; // Return early
+        break; // Stop early
       } else {
-        const value = argsValues[index];
+        const value = argsValues[i];
         const numberValue = Number(value);
 
         message.args[normalized] = Number.isNaN(numberValue) ? value : numberValue;
       }
-    });
+    }
   }
 }
